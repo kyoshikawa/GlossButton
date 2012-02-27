@@ -199,23 +199,20 @@
     [super dealloc];
 }
 
-- (void)setBackgroundColor:(UIColor *)backgroundColor
-{
-	CGFloat r = 0.0f, g = 0.0f, b=0.0f, a=1.0f;
-	[backgroundColor getRed:&r green:&g blue:&b alpha:&a];
-	ZHSBA hsba = ZHSBAFromRGBA(r, g, b, a);
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
+	ZHSBA hsba;
+	CGColorToHSB(backgroundColor.CGColor, &hsba.h, &hsba.s, &hsba.b, &hsba.a);
 	self.hsbValue = [NSValue value:&hsba withObjCType:@encode(ZHSBA)];
-
 	[super setBackgroundColor:[UIColor clearColor]];
 }
 
-- (ZHSBA)HSBA
-{
+- (ZHSBA)HSBA {
 	ZHSBA hsba = {0, 0, 0, 1};
 	if (self.hsbValue) {
 		[self.hsbValue getValue:&hsba];
 	}
 	return hsba;
 }
+
 
 @end

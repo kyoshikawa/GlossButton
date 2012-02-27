@@ -50,8 +50,7 @@ void HSBtoRGB(CGFloat h, CGFloat s, CGFloat v, CGFloat *r, CGFloat *g, CGFloat *
 		*r = *g = *b = v;
 		return;
     }
-    if (h < 0.0f)
-		h = 0.0f;
+    if (h < 0.0f) h = 0.0f;
     h *= 6.0f;
     int sector = ((int)h) % 6;
     f = h - (CGFloat)sector;						// factorial part of h
