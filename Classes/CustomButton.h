@@ -12,31 +12,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+//	(Feb 2012) chnaged by Kaz Yoshikawa
+//	1.	remove label, then use standard title instead
+//	2.	remove touch event hundling, use - addTarget:action:forControlEvents: or IB
+//	3.	implement blackgroundColor to be the color of button which can be
+//		specified by Interface Builder.
+
+
 #import <UIKit/UIKit.h>
 
 @interface CustomButton : UIButton {
     BOOL _selected;
 	BOOL _toggled;
-    NSInvocation *_invocation;    
-    UILabel *_label;
-	BOOL _pause;
 	int _buttonStyle;
-	
-	CGFloat _hue;
-    CGFloat _saturation;
-    CGFloat _brightness;
+	NSValue *_hsbValue;
 }
 @property  int buttonStyle;
 @property  BOOL selected;
 @property  BOOL toggled;
-@property  BOOL pause;
-@property (retain) NSInvocation *invocation;
-@property  CGFloat hue;
-@property  CGFloat saturation;
-@property  CGFloat brightness;
-@property (retain) UILabel *label;
 
-- (id)initWithText:(NSString *)text target:(id)target selector:(SEL)selector;
-- (id)initWithTextAndHSB:(NSString *)text target:(id)target selector:(SEL)selector hue:(CGFloat)hue saturation:(CGFloat)saturation brightness:(CGFloat)brightness;
-- (void) setLabelWithText:(NSString *)text andSize:(float)size andVerticalShift:(float)shift;
++ (id)customButtonWithFrame:(CGRect)frame title:(NSString *)title target:(id)target selector:(SEL)selector;
+
 @end

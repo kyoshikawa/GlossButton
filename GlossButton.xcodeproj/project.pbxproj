@@ -19,6 +19,7 @@
 		3C89EB0D13A1CA6500F48A7A /* CustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C89EB0C13A1CA6500F48A7A /* CustomButton.m */; };
 		3C89EB4A13A1CDE300F48A7A /* bg_calc.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C89EB4813A1CDE300F48A7A /* bg_calc.png */; };
 		3C89EB4B13A1CDE300F48A7A /* bg_calc@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C89EB4913A1CDE300F48A7A /* bg_calc@2x.png */; };
+		CC99BF3D14FB59C60061327B /* ZColorUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CC99BF3C14FB59C60061327B /* ZColorUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,8 @@
 		3C89EB4813A1CDE300F48A7A /* bg_calc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_calc.png; sourceTree = "<group>"; };
 		3C89EB4913A1CDE300F48A7A /* bg_calc@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_calc@2x.png"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* GlossButton-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GlossButton-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		CC99BF3B14FB59C60061327B /* ZColorUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZColorUtils.h; sourceTree = "<group>"; };
+		CC99BF3C14FB59C60061327B /* ZColorUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZColorUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				3C89EB4613A1CDD300F48A7A /* Images */,
+				CC99BF3614FB2D120061327B /* External */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -129,6 +133,16 @@
 				3C89EB4913A1CDE300F48A7A /* bg_calc@2x.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		CC99BF3614FB2D120061327B /* External */ = {
+			isa = PBXGroup;
+			children = (
+				CC99BF3B14FB59C60061327B /* ZColorUtils.h */,
+				CC99BF3C14FB59C60061327B /* ZColorUtils.m */,
+			);
+			name = External;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,6 +213,7 @@
 				28D7ACF80DDB3853001CB0EB /* GlossButtonViewController.m in Sources */,
 				3C89EB0A13A1CA5400F48A7A /* Common.m in Sources */,
 				3C89EB0D13A1CA6500F48A7A /* CustomButton.m in Sources */,
+				CC99BF3D14FB59C60061327B /* ZColorUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -49,7 +49,10 @@
 }
 */
 
-
+- (CustomButton *)customButtonWithFrame:(CGRect)frame title:(NSString *)title
+{
+	return [CustomButton customButtonWithFrame:frame title:title target:self selector:@selector(buttonTapped:)];
+}
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
@@ -75,62 +78,43 @@
 	CGFloat col3=col2+width+spacingx;
 	CGFloat col4=col3+width+spacingx;
 	
+	self.button7 = [self customButtonWithFrame:CGRectMake(col1,row1, width, height) title:@"7"];
+	self.button8 = [self customButtonWithFrame:CGRectMake(col2,row1, width, height) title:@"8"];
+	self.button9 = [self customButtonWithFrame:CGRectMake(col3,row1, width, height) title:@"9"];
+
+	self.button4 = [self customButtonWithFrame:CGRectMake(col1,row2, width, height) title:@"4"];
+	self.button5 = [self customButtonWithFrame:CGRectMake(col2,row2, width, height) title:@"5"];
+	self.button6 = [self customButtonWithFrame:CGRectMake(col3,row2, width, height) title:@"6"];
+
+	self.button1 = [self customButtonWithFrame:CGRectMake(col1,row3, width, height) title:@"1"];
+	self.button2 = [self customButtonWithFrame:CGRectMake(col2,row3, width, height) title:@"2"];
+	self.button3 = [self customButtonWithFrame:CGRectMake(col3,row3, width, height) title:@"3"];
+
+	self.button0 = [self customButtonWithFrame:CGRectMake(col1,row4, width*2, height) title:@"0"];
+
+	self.buttonPoint = [self customButtonWithFrame:CGRectMake(col3,row4, width, height) title:@"."];
+	self.buttonEquals = [self customButtonWithFrame:CGRectMake(col4,row3, width, height*2) title:@"="];
+	self.buttonPlus = [self customButtonWithFrame:CGRectMake(col4,row2, width, height) title:@"-"];
+	self.buttonMinus = [self customButtonWithFrame:CGRectMake(col4,row1, width, height) title:@"+"];
 	
-	self.button7 = [[[CustomButton alloc] initWithText:@"7" target:self selector:@selector(buttonTapped:)] autorelease];
-	_button7.frame = CGRectMake(col1,row1, width, height);
-	self.button8 = [[[CustomButton alloc] initWithText:@"8" target:self selector:@selector(buttonTapped:)] autorelease];
-	_button8.frame = CGRectMake(col2,row1, width, height);
-	self.button9 = [[[CustomButton alloc] initWithText:@"9" target:self selector:@selector(buttonTapped:)] autorelease];
-	_button9.frame = CGRectMake(col3,row1, width, height);
-	self.button4 = [[[CustomButton alloc] initWithText:@"4" target:self selector:@selector(buttonTapped:)] autorelease];
-	_button4.frame = CGRectMake(col1,row2, width, height);
-	self.button5 = [[[CustomButton alloc] initWithText:@"5" target:self selector:@selector(buttonTapped:)] autorelease];
-	_button5.frame = CGRectMake(col2,row2, width, height);
-	self.button6 = [[[CustomButton alloc] initWithText:@"6" target:self selector:@selector(buttonTapped:)] autorelease];
-	_button6.frame = CGRectMake(col3,row2, width, height);
-	self.button1 = [[[CustomButton alloc] initWithText:@"1" target:self selector:@selector(buttonTapped:)] autorelease];
-	_button1.frame = CGRectMake(col1,row3, width, height);
-	self.button2 = [[[CustomButton alloc] initWithText:@"2" target:self selector:@selector(buttonTapped:)] autorelease];
-	_button2.frame = CGRectMake(col2,row3, width, height);
-	self.button3 = [[[CustomButton alloc] initWithText:@"3" target:self selector:@selector(buttonTapped:)] autorelease];
-	_button3.frame = CGRectMake(col3,row3, width, height);
-	self.button0 = [[[CustomButton alloc] initWithText:@"0" target:self selector:@selector(buttonTapped:)] autorelease];
-	_button0.frame = CGRectMake(col1,row4, width*2, height);
-	self.buttonPoint = [[[CustomButton alloc] initWithText:@"." target:self selector:@selector(buttonTapped:)] autorelease];
-	_buttonPoint.frame = CGRectMake(col3,row4, width, height);
+	self.buttonMultiply = [self customButtonWithFrame:CGRectMake(col4,row0, width, height) title:@"×"];
+	self.buttonDivide = [self customButtonWithFrame:CGRectMake(col3,row0, width, height) title:@"÷"];
+	self.buttonPlusminus = [self customButtonWithFrame:CGRectMake(col2,row0, width, height) title:@"±"];
+	self.buttonClear = [self customButtonWithFrame:CGRectMake(col1,row0, width, height) title:@"AC"];
 
-	self.buttonEquals = [[[CustomButton alloc] initWithTextAndHSB:@"" target:self selector:@selector(buttonTapped:) hue:0.075f saturation:0.9f brightness:0.96f] autorelease];
-	_buttonEquals.frame = CGRectMake(col4,row3, width, height*2);
 
-	self.buttonPlus = [[[CustomButton alloc] initWithTextAndHSB:@"" target:self selector:@selector(buttonTapped:) hue:0.058f saturation:0.26f brightness:0.42f] autorelease];
-	_buttonPlus.frame = CGRectMake(col4,row2, width, height);
-	self.buttonMinus = [[[CustomButton alloc] initWithTextAndHSB:@"" target:self selector:@selector(buttonTapped:) hue:0.058f saturation:0.26f brightness:0.42f] autorelease];
-	_buttonMinus.frame = CGRectMake(col4,row1, width, height);
-	self.buttonMultiply = [[[CustomButton alloc] initWithTextAndHSB:@"" target:self selector:@selector(buttonTapped:) hue:0.058f saturation:0.26f brightness:0.42f] autorelease];
-	_buttonMultiply.frame = CGRectMake(col4,row0, width, height);
-
-	self.buttonDivide = [[[CustomButton alloc] initWithTextAndHSB:@"" target:self selector:@selector(buttonTapped:) hue:0.058f saturation:0.26f brightness:0.42f] autorelease];
-	_buttonDivide.frame = CGRectMake(col3,row0, width, height);
-	self.buttonPlusminus = [[[CustomButton alloc] initWithTextAndHSB:@"" target:self selector:@selector(buttonTapped:) hue:0.058f saturation:0.26f brightness:0.42f] autorelease];
-	_buttonPlusminus.frame = CGRectMake(col2,row0, width, height);
-	self.buttonClear = [[[CustomButton alloc] initWithTextAndHSB:@"" target:self selector:@selector(buttonTapped:) hue:0.058f saturation:0.26f brightness:0.42f] autorelease];
-	_buttonClear.frame = CGRectMake(col1,row0, width, height);
-
-	[self.buttonClear setLabelWithText:@"AC" andSize:18.0f andVerticalShift:0.0f];
-	[self.buttonMinus setLabelWithText:@"−" andSize:24.0f andVerticalShift:-2.0f];
-	[self.buttonMultiply setLabelWithText:@"×" andSize:24.0f andVerticalShift:-2.0f];
-	[self.buttonPlus setLabelWithText:@"+" andSize:24.0f andVerticalShift:-2.0f];
-	[self.buttonDivide setLabelWithText:@"÷" andSize:24.0f andVerticalShift:-2.0f];
-	[self.buttonPlusminus setLabelWithText:@"±" andSize:24.0f andVerticalShift:-2.0f];
-
-	[self.buttonEquals setLabelWithText:@"=" andSize:24.0f andVerticalShift:22.0f];
-
-	_buttonPlus.toggled=YES;
+	self.buttonEquals.backgroundColor = [UIColor colorWithHue:0.075f saturation:0.9f brightness:0.96f alpha:1.0f];
+	self.buttonPlus.backgroundColor = [UIColor colorWithHue:0.058f saturation:0.26f brightness:0.42f alpha:1.0f];
+	self.buttonMinus.backgroundColor = [UIColor colorWithHue:0.058f saturation:0.26f brightness:0.42f alpha:1.0f];
+	self.buttonMultiply.backgroundColor = [UIColor colorWithHue:0.058f saturation:0.26f brightness:0.42f alpha:1.0f];
+	self.buttonDivide.backgroundColor = [UIColor colorWithHue:0.058f saturation:0.26f brightness:0.42f alpha:1.0f];
+	self.buttonPlusminus.backgroundColor = [UIColor colorWithHue:0.058f saturation:0.26f brightness:0.42f alpha:1.0f];
+	self.buttonClear.backgroundColor = [UIColor colorWithHue:0.058f saturation:0.26f brightness:0.42f alpha:1.0f];
 	
 	self.buttons = [NSMutableArray arrayWithObjects:
-                      _button1,                            
-                      _button2, 
-                      _button3, 
+					_button1,                            
+					_button2, 
+					_button3, 
 					_button4,                            
 					_button5, 
 					_button6, 
@@ -146,9 +130,7 @@
 					_buttonClear,
 					_buttonPlusminus,
 					_buttonDivide,
-					
-
-                      nil];
+					nil];
 	
     for (CustomButton *button in _buttons) {
         [self.view addSubview:button];
@@ -156,6 +138,9 @@
 
 }
 
+- (void)buttonTapped:(id)sender
+{
+}
 
 
 /*

@@ -12,151 +12,83 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+
+//	Note:
+//	Kaz Yoshikawa made some changes for the usage of typical push button,
+//	in instead of being specialized for cool caluculator button.
+//	In order to specify button color from Interface Builder, you can specify
+//	background color for the button.
+
 #import "CustomButton.h"
 #import "Common.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ZColorUtils.h"
+
+
+@interface CustomButton ()
+@property (retain) NSValue *hsbValue;
+@property (readonly) ZHSBA HSBA;
+@end
 
 #define kButtonRadius 6.0
 
 @implementation CustomButton
 @synthesize selected = _selected;
 @synthesize toggled=_toggled;
-@synthesize pause = _pause;
-@synthesize invocation = _invocation;
-@synthesize hue = _hue;
-@synthesize saturation = _saturation;
-@synthesize brightness = _brightness;
 @synthesize buttonStyle = _buttonStyle;
-@synthesize label=_label;
+@synthesize hsbValue = _hsbValue;
 
--(id) initWithCoder:(NSCoder *)aDecoder {
-    if ((self = [super initWithCoder:aDecoder])) {
-        self.opaque = NO;
-        self.backgroundColor = [UIColor clearColor];
-        _hue = 1.0;
-        _saturation = 1.0;
-        _brightness = 1.0;
-    }
-    return self;
++ (id)customButtonWithFrame:(CGRect)frame title:(NSString *)title target:(id)target selector:(SEL)selector;
+{
+	CustomButton *button = [[[CustomButton alloc] initWithFrame:frame] autorelease];
+	[button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
+	[button setTitle:title forState:UIControlStateNormal];
+	return button;
 }
 
-
-- (id)initWithTextAndHSB:(NSString *)text target:(id)target selector:(SEL)selector hue:(CGFloat)hue saturation:(CGFloat)saturation brightness:(CGFloat)brightness {
-
-	_hue=hue;
-	_saturation=saturation;
-	_brightness=brightness;
-	
-    if ((self = [super initWithFrame:CGRectZero])) {
-        
-        // Create invocation to be called upon a tap        
-        if (target && selector) {
-            NSMethodSignature *signature = [[target class] instanceMethodSignatureForSelector:selector];
-            if (signature != nil) {
-                self.invocation = [NSInvocation invocationWithMethodSignature:signature];
-                [_invocation setTarget:target];
-                [_invocation setSelector:selector];
-                [_invocation setArgument:&self atIndex:2];                
-            }
-        }
-        if (text==@"X") {			
-			UIImage	*image = [UIImage imageNamed:@"backspace.png"];
-			UIImageView	*imageView = [[UIImageView alloc] initWithFrame:CGRectMake (20,10,40,32)];
-			
-			//add a shadow to the image to make it look "inset" into the button
-			CALayer * shadowLayer = [imageView layer];
-			shadowLayer.masksToBounds = NO;
-			shadowLayer.shadowOffset = CGSizeMake(0,-1);
-			shadowLayer.shadowOpacity = 0.7f;
-			shadowLayer.shadowRadius = 0.5;
-			
-			[imageView setImage:image];
-			[self addSubview:imageView];
-		} else if (text==@"Tab") {
-			
-			UIImage	*image = [UIImage imageNamed:@"tab2.png"];
-			UIImageView	*imageView = [[UIImageView alloc] initWithFrame:CGRectMake (20,10,40,32)];
-			
-			//add a shadow to the image to make it look "inset" into the button
-			CALayer * shadowLayer = [imageView layer];
-			shadowLayer.masksToBounds = NO;
-			shadowLayer.shadowOffset = CGSizeMake(0,-1);
-			shadowLayer.shadowOpacity = 0.7f;
-			shadowLayer.shadowRadius = 0.5;
-			
-			[imageView setImage:image];
-			[self addSubview:imageView];
-			_pause = YES;			
-		} else {
-            // Create label for button
-            UILabel *label = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
-            label.textAlignment = UITextAlignmentCenter;
-            label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-            label.text = text;
-            label.backgroundColor = [UIColor clearColor];
-            label.textColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
-
-			label.font = [UIFont boldSystemFontOfSize:24];
-			
-			CALayer * shadowLayer = [label layer];
-			shadowLayer.masksToBounds = NO;
-			shadowLayer.shadowOffset = CGSizeMake(0,-1);
-			shadowLayer.shadowOpacity = 0.7f;
-			shadowLayer.shadowRadius = 0.5;
-			
-            [self addSubview:label];
-            _label = label;
-        }
-
-    }
-    return self;
-}
-
-- (void)setLabelWithText:(NSString*)text andSize:(float)size andVerticalShift:(float)shift {
-	// Create label for button
-	CGRect frame=CGRectMake(self.bounds.origin.x, self.bounds.origin.y+shift, self.bounds.size.width, self.bounds.size.height);
-	UILabel *label = [[[UILabel alloc] initWithFrame:frame] autorelease];
-	label.textAlignment = UITextAlignmentCenter;
-	label.text = text;
-	label.backgroundColor = [UIColor clearColor];
-	label.textColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
-	
-	label.font = [UIFont boldSystemFontOfSize:size];
-	
-	CALayer * shadowLayer = [label layer];
-	shadowLayer.masksToBounds = NO;
-	shadowLayer.shadowOffset = CGSizeMake(0,-1);
-	shadowLayer.shadowOpacity = 0.7f;
-	shadowLayer.shadowRadius = 0.5;
-	
-	[self addSubview:label];
-	_label = label;
-}
-
-- (id)initWithText:(NSString *)text target:(id)target selector:(SEL)selector {
-	
-	[self initWithTextAndHSB:text target:target selector:selector hue:0.0f saturation:0.0f brightness:0.0f];
-	
+-(id)initWithCoder:(NSCoder *)decoder {
+	if ((self = [super initWithCoder:decoder])) {
+		self.opaque = NO;
+	}
 	return self;
+}
+
+- (id)initWithFrame:(CGRect)frame {
+	if ((self = [super initWithFrame:frame])) {
+		self.opaque = NO;
+	}
+	return self;
+}
+
+- (void)layoutSubviews {
+	[super layoutSubviews];
 	
+	if (!self.hsbValue) {
+		CGFloat r, g, b, a;
+		[self.backgroundColor getRed:&r green:&g blue:&b alpha:&a];
+		ZHSBA hsba = ZHSBAFromRGBA(r, g, b, a);
+		self.hsbValue = [NSValue value:&hsba withObjCType:@encode(ZHSBA)];
+		super.backgroundColor = [UIColor clearColor];
+	}
 }
 
 - (void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
-	
-    CGFloat actualBrightness = _brightness;
+	ZHSBA hsba = self.HSBA;
+
+    CGFloat actualBrightness = hsba.b;
     if (self.selected) {
         actualBrightness -= 0.10;
     }   
-    
+
     CGColorRef blackColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0].CGColor;
     CGColorRef highlightStart = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.7].CGColor;
     CGColorRef highlightStop = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0].CGColor;
 
-	CGColorRef outerTop = [UIColor colorWithHue:_hue saturation:_saturation brightness:1.0*actualBrightness alpha:1.0].CGColor;
-    CGColorRef outerBottom = [UIColor colorWithHue:_hue saturation:_saturation brightness:0.80*actualBrightness alpha:1.0].CGColor;
+	CGColorRef outerTop = [UIColor colorWithHue:hsba.h saturation:1.0*hsba.s brightness:1.0*hsba.b alpha:1.0].CGColor;
+    CGColorRef outerBottom = [UIColor colorWithHue:hsba.h saturation:1.0*hsba.s brightness:0.80*actualBrightness alpha:1.0].CGColor;
 	
-    CGFloat outerMargin = 7.5f;
+    CGFloat outerMargin = 1.0f;
     CGRect outerRect = CGRectInset(self.bounds, outerMargin, outerMargin);            
     CGMutablePathRef outerPath = createRoundedRectForRect(outerRect, 6.0);
 	
@@ -168,7 +100,7 @@
 
 	CGContextRestoreGState(context);
 	    
-	if (!self.selected) {
+	if (!self.highlighted) {
 
 		CGRect highlightRect = CGRectInset(outerRect, 1.0f, 1.0f);
 		CGMutablePathRef highlightPath = createRoundedRectForRect(highlightRect, 6.0);
@@ -196,7 +128,7 @@
 	}
 	if (!self.toggled) {
 		//bottom highlight
-		CGRect highlightRect2 = CGRectInset(self.bounds, 6.5f, 6.5f);
+		CGRect highlightRect2 = CGRectInset(self.bounds, 1.0f, 1.0f);
 		CGMutablePathRef highlightPath2 = createRoundedRectForRect(highlightRect2, 6.0);
 		
 		CGContextSaveGState(context);
@@ -211,7 +143,7 @@
 	}
     else {
 		//toggle marker
-		CGRect toggleRect= CGRectInset(self.bounds, 5.0f, 5.0f);
+		CGRect toggleRect= CGRectInset(self.bounds, 1.0f, 1.0f);
 		CGMutablePathRef togglePath= createRoundedRectForRect(toggleRect, 8.0);
 
 		CGContextSaveGState(context);
@@ -231,42 +163,59 @@
     CGContextRestoreGState(context);
 
     CFRelease(outerPath);
-   
-    
 }
 
--(void) setToggled:(BOOL)toggled {
+- (BOOL)toggled {
+	return _toggled;
+}
+
+-(void)setToggled:(BOOL)toggled {
     if (_toggled == toggled) return;    
     _toggled = toggled;
     [self setNeedsDisplay];
 }
 
--(void) setSelected:(BOOL)selected {
+- (BOOL)selected {
+	return _selected;
+}
+
+-(void)setSelected:(BOOL)selected {
     if (_selected == selected) return;    
     _selected = selected;
     [self setNeedsDisplay];
 }
 
--(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    self.selected = YES;    
-    if (_invocation != nil) {
-        if (!_pause) [_invocation invoke];
-    }    
-}
-
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    self.selected = NO;
-	if (_pause) [_invocation invoke];
-}
-
--(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    self.selected = NO;
+- (void)setHighlighted: (BOOL)highlighted {
+    BOOL old = self.highlighted;
+    [super setHighlighted: highlighted];
+    
+    if (old != highlighted) {
+        [self setNeedsDisplay];
+	}
 }
 
 - (void)dealloc {
-    [_invocation release];
-    _invocation = nil;
+	self.hsbValue = nil;
     [super dealloc];
+}
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor
+{
+	CGFloat r = 0.0f, g = 0.0f, b=0.0f, a=1.0f;
+	[backgroundColor getRed:&r green:&g blue:&b alpha:&a];
+	ZHSBA hsba = ZHSBAFromRGBA(r, g, b, a);
+	self.hsbValue = [NSValue value:&hsba withObjCType:@encode(ZHSBA)];
+
+	[super setBackgroundColor:[UIColor clearColor]];
+}
+
+- (ZHSBA)HSBA
+{
+	ZHSBA hsba = {0, 0, 0, 1};
+	if (self.hsbValue) {
+		[self.hsbValue getValue:&hsba];
+	}
+	return hsba;
 }
 
 @end
